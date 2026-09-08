@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.isaadahmad.ledgr",
+        "sha256_cert_fingerprints": ["7C:39:7B:C0:97:2E:09:E0:4F:A6:F0:04:38:EB:B1:01:11:7E:D1:6A:DE:88:52:F7:EA:97:C6:18:76:34:EA:7A"]
+      }
+    }]
