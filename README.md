@@ -15,7 +15,9 @@ follow wherever you are.
 
 | File | What it is |
 |---|---|
-| `index.html` | The whole app. UI, logic, database, PDF and Excel engines. No libraries, no CDN. |
+| `index.html` | Public landing page. Download the APK, or open the app in the browser. |
+| `app.html` | The whole app. UI, logic, database, PDF and Excel engines. No libraries, no CDN. |
+| `.nojekyll` | Empty, but stops GitHub Pages from hiding dot-folders. |
 | `manifest.webmanifest` | Makes it installable with a name, icon and standalone window. |
 | `sw.js` | Service worker. Caches the app so it opens with the network completely off. |
 | `icon-192.png` `icon-512.png` `icon-maskable-512.png` `apple-touch-icon.png` | App icons. |
@@ -31,8 +33,10 @@ Keep all files in the same folder. Paths are relative, so a subfolder works fine
 1. Sign in at github.com → **+** (top right) → **New repository**.
 2. Name it `ledgr`, set it to **Public**, click **Create repository**.
 3. On the empty repo page click **uploading an existing file**.
-4. Drag in all eight files (`index.html`, `manifest.webmanifest`, `sw.js`, the four icons,
-   `README.md`). They must sit at the top level, not inside a folder.
+4. Drag in every file (`index.html`, `app.html`, `manifest.webmanifest`, `sw.js`, the four
+   icons, `README.md`). They must sit at the top level, not inside a folder.
+   `.nojekyll` cannot be drag-dropped because browsers hide dotfiles — use
+   **Add file → Create new file**, name it `.nojekyll`, leave it empty and commit.
 5. Click **Commit changes**.
 6. Go to **Settings → Pages**. Under *Build and deployment* set
    **Source: Deploy from a branch**, **Branch: `main`**, **Folder: `/ (root)`** → **Save**.
@@ -66,14 +70,17 @@ file to the repo automatically — leave it there.
 
 ### Updating later
 
-Upload the changed `index.html` over the old one, and bump `CACHE` in `sw.js`
+Upload the changed `app.html` over the old one, and bump `CACHE` in `sw.js`
 (`ledgr-v2` → `ledgr-v3`). Without that bump, phones keep serving the cached copy.
 
 ---
 
 ## 2. Install it as an app
 
-Open your GitHub Pages link in Chrome on the phone → menu (⋮) → **Install app** /
+Your Pages link now opens the landing page, where people choose between the APK and the
+browser. The app itself lives at `/app.html`, which is what gets installed.
+
+Open the landing page in Chrome on the phone, tap **Or open it in your browser** → menu (⋮) → **Install app** /
 **Add to Home screen**. Turn off mobile data and open it from the home screen: full
 screen, no browser bars, everything works.
 
@@ -83,7 +90,9 @@ saves — the app warns you if that happens.
 
 ## 3. Turn it into a signed APK, no coding (PWABuilder)
 
-1. Go to **pwabuilder.com**, paste your GitHub Pages URL.
+1. Go to **pwabuilder.com** and paste the **app** URL, not the landing page:
+   `https://YOUR-USERNAME.github.io/ledgr-apk/app.html`
+   (the landing page has no manifest, so PWABuilder would reject it)
 2. **Package for stores → Android**.
 3. Set the package ID to something like `com.isaadahmad.ledgr`.
 4. Download the zip → inside is `app-release-signed.apk`.
@@ -94,7 +103,7 @@ saves — the app warns you if that happens.
 This bundles the app inside the APK, so nothing is ever fetched from the internet.
 
 1. Android Studio → **New Project → Empty Views Activity**, Kotlin.
-2. Put `index.html`, `sw.js`, `manifest.webmanifest` and the icons in
+2. Put `app.html`, `sw.js`, `manifest.webmanifest` and the icons in
    `app/src/main/assets/ledgr/`.
 3. `app/build.gradle` dependencies: `implementation "androidx.webkit:webkit:1.11.0"`
 4. `AndroidManifest.xml` — inside `<manifest>`:
@@ -201,7 +210,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        web.loadUrl("https://appassets.androidplatform.net/assets/ledgr/index.html")
+        web.loadUrl("https://appassets.androidplatform.net/assets/ledgr/app.html")
     }
 
     override fun onBackPressed() {

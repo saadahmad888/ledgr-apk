@@ -1,0 +1,6 @@
+*.keystore
+*.jks
+*.apk
+*.aab
+keystore.txt
+key-info.txt

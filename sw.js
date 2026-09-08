@@ -1,6 +1,6 @@
 /* Ledgr service worker — offline cache. Built by Saad Ahmad · isaadahmad.com */
-const CACHE = 'ledgr-v4';
-const ASSETS = ['./', './index.html', './manifest.webmanifest',
+const CACHE = 'ledgr-v5';
+const ASSETS = ['./', './index.html', './app.html', './manifest.webmanifest',
   './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', e => {
@@ -20,6 +20,6 @@ self.addEventListener('fetch', e => {
         caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {});
         return res;
       })
-      .catch(() => caches.match('./index.html')))
+      .catch(() => caches.match('./app.html')))
   );
 });
